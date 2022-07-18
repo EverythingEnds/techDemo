@@ -5,6 +5,7 @@
 classes/
 /build
 out/
+.mvn
 
 *.iml
 *.log

@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: dav
+      changes:
+        - createTable:
+            tableName: branch
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: postal_address_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_branch_postal_address
+                    references: address(id)
+              - column:
+                  name: chief_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_branch_chief
+                    references: employee(id)
+              - column:
+                  name: agency_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_branch_parent_agency
+                    references: agency(id)

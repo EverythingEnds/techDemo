@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: dav
+      changes:
+        - createTable:
+            tableName: agency
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: fullname
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shortname
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inn
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ogrn
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: postal_address_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_postal_address
+                    references: address(id)
+              - column:
+                  name: legal_address_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_legal_Address
+                    references: address(id)
+              - column:
+                  name: director_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_employee
+                    references: employee(id)
