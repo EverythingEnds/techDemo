@@ -1,16 +1,11 @@
 package com.example.techdemo.storage.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
@@ -21,7 +16,10 @@ import java.time.LocalDate;
  * @version 1.0
  * @since 2022-07-19
  */
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 @Indexed
 @Entity(name = "employee")
 public class Employee {
@@ -29,12 +27,15 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
-    @FullTextField()
+    @FullTextField
     private String surname;
-    @FullTextField()
+    @FullTextField
     private String firstname;
-    @FullTextField()
+    @FullTextField
     private String patronymic;
-    @GenericField
     private LocalDate birthday;
+    @OneToOne(mappedBy = "chief")
+    private Branch branch;
+    @OneToOne(mappedBy = "director")
+    private Agency agency;
 }

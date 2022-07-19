@@ -63,8 +63,7 @@ public class AgencyService implements AgencyQuery {
         if (filterValue == null || filterValue.isEmpty()) {
             agencies = agencyRepository.findAll();
         } else {
-            //todo: field param hardcoded for debug, there is should be usage of predefined array
-            agencies = agencySearchService.searchBy(filterValue, "fullname");
+            agencies = agencySearchService.searchBy(filterValue);
         }
         return conversionService.convertAgencies(agencies);
     }

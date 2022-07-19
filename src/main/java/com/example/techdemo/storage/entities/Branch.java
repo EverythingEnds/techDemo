@@ -1,8 +1,7 @@
 package com.example.techdemo.storage.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -19,7 +18,10 @@ import javax.persistence.*;
  * @version 1.0
  * @since 2022-07-19
  */
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 @Indexed
 @Entity(name = "branch")
 public class Branch {
@@ -27,17 +29,14 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
-    @FullTextField()
+    @FullTextField
     private String name;
     @OneToOne(targetEntity = Address.class)
     @IndexedEmbedded
-    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     private Address postalAddress;
     @OneToOne(targetEntity = Employee.class)
-    @IndexedEmbedded
-    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     private Employee chief;
     @ManyToOne
-    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     private Agency agency;
 }

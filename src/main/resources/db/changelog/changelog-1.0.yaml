@@ -15,7 +15,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: index
-                  type: BIGINT
+                  type: varchar(255)
               - column:
                   name: region
                   type: varchar(255)
@@ -30,4 +30,4 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: apartments
-                  type: INTEGER
+                  type: varchar(255)

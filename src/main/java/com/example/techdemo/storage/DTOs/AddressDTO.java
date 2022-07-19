@@ -12,10 +12,10 @@ import lombok.Data;
 @Data
 public class AddressDTO {
     private Long id;
-    private Long index;
+    private String index;
     private String region;
     private String city;
     private String street;
     private String house;
-    private Integer apartments;
+    private String apartments;
 }

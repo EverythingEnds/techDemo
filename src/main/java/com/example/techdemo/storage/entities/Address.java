@@ -1,16 +1,10 @@
 package com.example.techdemo.storage.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Address entity, keeps info about single address
@@ -19,7 +13,10 @@ import javax.persistence.Id;
  * @version 1.0
  * @since 2022-07-19
  */
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 @Indexed
 @Entity(name = "address")
 public class Address {
@@ -27,16 +24,22 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
-    @GenericField
-    private Long index;
-    @FullTextField()
+    @FullTextField
+    private String index;
+    @FullTextField
     private String region;
-    @FullTextField()
+    @FullTextField
     private String city;
-    @FullTextField()
+    @FullTextField
     private String street;
-    @FullTextField()
+    @FullTextField
     private String house;
-    @GenericField
-    private Integer apartments;
+    @FullTextField
+    private String apartments;
+    @OneToOne(mappedBy = "legalAddress")
+    private Agency agencyLegal;
+    @OneToOne(mappedBy = "postalAddress")
+    private Agency agencyPostal;
+    @OneToOne(mappedBy = "postalAddress")
+    private Branch branch;
 }
