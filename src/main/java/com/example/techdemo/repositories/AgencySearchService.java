@@ -44,11 +44,9 @@ public class AgencySearchService {
                 Search.session(entityManager);
 
         SearchResult<Agency> result = searchSession.search(Agency.class)
-//                .where(x -> x.match()
-//                        .fields(field)
-//                        .matching(text))
-                .where(x->x.matchAll()) //also doesnt work, so there is trouble with session;
-                .fetchAll();
+                .where(x -> x.match()
+                        .fields(field)
+                        .matching(text)).fetchAll();
 
         List<Agency> hits = result.hits();
         return hits;
