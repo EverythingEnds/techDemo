@@ -40,7 +40,7 @@ public class ApiExceptionHandler {
      * @param e thrown exception
      * @return response entity with error message
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Unhandled exception")
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
         log.error("Exception: " + e.getMessage());

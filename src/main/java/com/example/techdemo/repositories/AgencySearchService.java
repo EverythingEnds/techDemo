@@ -25,14 +25,14 @@ import java.util.List;
 public class AgencySearchService {
 
     private static final String agencyProperties = "[\"branches.postalAddress.street\",\"postalAddress.house\",\"branches.postalAddress.index\",\"director.firstname\",\"legalAddress.house\",\"INN\",\"branches.postalAddress.region\",\"branches.name\",\"legalAddress.apartments\",\"legalAddress.region\",\"postalAddress.region\",\"branches.postalAddress.house\",\"director.patronymic\",\"postalAddress.city\",\"legalAddress.city\",\"branches.chief.patronymic\",\"postalAddress.index\",\"branches.postalAddress.apartments\",\"legalAddress.index\",\"branches.postalAddress.city\",\"shortname\",\"director.surname\",\"OGRN\",\"branches.chief.firstname\",\"branches.chief.surname\",\"postalAddress.street\",\"fullname\",\"legalAddress.street\",\"postalAddress.apartments\"]";
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private EntityManager entityManager;
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private List<String> properties;
 
 
     @PostConstruct
-    public void init() {
+    private void init() {
         try {
             properties = objectMapper.readValue(agencyProperties, ArrayList.class);
         } catch (JsonProcessingException e) {

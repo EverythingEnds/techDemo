@@ -3,25 +3,24 @@ package com.example.techdemo.controllers;
 import com.example.techdemo.controllers.exceptions.RestApiException;
 import com.example.techdemo.services.interfaces.AgencyQuery;
 import com.example.techdemo.storage.DTOs.AgencyDTO;
-import com.example.techdemo.storage.entities.Agency;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
-import org.hibernate.search.mapper.orm.Search;
-import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
-import org.hibernate.search.mapper.orm.schema.management.SearchSchemaManager;
-import org.hibernate.search.mapper.orm.session.SearchSession;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -49,6 +48,31 @@ public class AgencyRestController {
      * @return response entity with list of agencies info objects,
      * in error case contains error message with related response code
      */
+    @Operation(summary = "Gets all agencies, filtering by optional filter value", tags = "agency")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Found agencies",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = AgencyDTO.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ResponseEntity.class)))
+            }),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ResponseEntity.class)))
+                    })
+    })
     @GetMapping(path = "/get/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AgencyDTO>> getAgencies(@RequestParam Optional<String> filterValue) {
         final String endpoint = "/agency/get/all";
@@ -56,8 +80,6 @@ public class AgencyRestController {
             return ResponseEntity.ok().body(agencyService.getAgencyListByField(filterValue.orElse(null)));
         } catch (IllegalArgumentException e) {
             throw getRestApiException(HttpStatus.BAD_REQUEST, endpoint, e.getMessage()).addParameter("filter_value", filterValue.orElse(null));
-        } catch (NoSuchElementException e) {
-            throw getRestApiException(HttpStatus.NOT_FOUND, endpoint, e.getMessage()).addParameter("filter_value", filterValue.orElse(null));
         } catch (AccessDeniedException e) {
             throw getRestApiException(HttpStatus.FORBIDDEN, endpoint, e.getMessage()).addParameter("filter_value", filterValue.orElse(null));
         }
@@ -70,6 +92,39 @@ public class AgencyRestController {
      * @return response entity with list of agencies info objects,
      * in error case contains error message with related response code
      */
+    @Operation(summary = "Gets single agency by given id", tags = "agency")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Found agency",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = AgencyDTO.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ResponseEntity.class)))
+                    }),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ResponseEntity.class)))
+            }),
+            @ApiResponse(
+                    description = "agency by given id not found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ResponseEntity.class)))
+                    },
+                    responseCode = "404")
+    })
     @GetMapping(path = "/get/byId", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AgencyDTO> getAgency(@RequestParam long id) {
         final String endpoint = "/agency/get/byId";

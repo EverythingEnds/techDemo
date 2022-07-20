@@ -14,6 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+/**
+ * Config for indexing entities for full text finding via Hibernate Search and Lucene
+ *
+ * @author Viktorov Daniil
+ * @version 1.0
+ * @since 2022-07-20
+ */
 @Configuration
 public class IndexConfig {
 
@@ -27,6 +34,9 @@ public class IndexConfig {
         this.entityManager = entityManager;
     }
 
+    /**
+     * Indexing/reindexing existing entities for suggested classes(entity-classes).
+     */
     @Transactional
     public void indexPersistedData() throws InterruptedException {
         SearchSession searchSession = Search.session(entityManager);
